@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
+import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -97,6 +97,7 @@ export default function RootLayout({ children }) {
           </div>
         </nav>
         {children}
+        <Toaster />
       </body>
     </html>
   );

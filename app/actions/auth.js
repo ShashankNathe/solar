@@ -1,18 +1,25 @@
-import { hash } from "bcryptjs";
+"use server";
+import { compare, hash } from "bcryptjs";
 import { sign, verify } from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { turso } from "./database";
 
-export const register = async (email, password) => {
-  const user = await turso.execute("SELECT * FROM Users WHERE email = ?", [email]);
-  if (user) {
-    throw new Error("User already exists");
+export const register = async (name, email, password) => {
+  const userResult = await turso.execute(
+    "SELECT * FROM Users WHERE email = ?",
+    [email]
+  );
+  if (userResult.rows.length > 0) {
+    return { status: "error", message: "User already exists" };
   }
   try {
     const password_hash = await hash(password, 10);
 
-    const newUser = await turso.execute("INSERT INTO Users (name, email, password_hash, role) VALUES (?, ?, ?)", [user_name, email, password_hash, "admin"]);
-    const token = sign({ email: user.email }, process.env.JWT_SECRET, {
+    const newUserResult = await turso.execute(
+      "INSERT INTO Users (name, email, password, role) VALUES (?, ?, ?, ?)",
+      [name, email, password_hash, "admin"]
+    );
+    const token = sign({ email: email }, process.env.JWT_SECRET, {
       expiresIn: "30d",
     });
 
@@ -24,27 +31,31 @@ export const register = async (email, password) => {
       sameSite: "strict",
     });
 
-    return newUser;
+    return { status: "success", data: newUserResult.rows };
   } catch (error) {
     console.log(error);
-    throw new Error("Error registering user");
+    return { status: "error", message: "Error registering user" };
   }
 };
 
 export const login = async (email, password) => {
-  const user = await turso.execute("SELECT * FROM Users WHERE email = ?", [email]);
-  if (!user) {
-    throw new Error("Invalid email or password");
+  const userResult = await turso.execute(
+    "SELECT * FROM Users WHERE email = ?",
+    [email]
+  );
+  if (userResult.rows.length === 0) {
+    return { status: "error", message: "Invalid email or password" };
   }
-  const valid = await compare(password, user.password_hash);
+  const user = userResult.rows[0];
+  const valid = await compare(password, user.password);
+
   if (!valid) {
-    throw new Error("Invalid email or password");
+    return { status: "error", message: "Invalid email or password" };
   }
   try {
     const token = sign({ email: user.email }, process.env.JWT_SECRET, {
       expiresIn: "30d",
     });
-
     const cookieStore = cookies();
     cookieStore.set("token", token, {
       httpOnly: true,
@@ -52,11 +63,10 @@ export const login = async (email, password) => {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       sameSite: "strict",
     });
-
-    return user;
+    return { status: "success", data: { email: user.email, role: user.role } };
   } catch (error) {
     console.log(error);
-    throw new Error("Error logging in user");
+    return { status: "error", message: "Error logging in" };
   }
 };
 
@@ -80,7 +90,10 @@ export const updateUser = async (id, name, role) => {
 
   if (current_user.role === "admin") {
     try {
-      const user = await turso.execute("UPDATE Users SET name = ?, role = ? WHERE id = ?", [name, role, id]);
+      const user = await turso.execute(
+        "UPDATE Users SET name = ?, role = ? WHERE id = ?",
+        [name, role, id]
+      );
       return user;
     } catch (error) {
       console.log(error);
@@ -90,7 +103,10 @@ export const updateUser = async (id, name, role) => {
 
   if (isCurrentUser && !role) {
     try {
-      const user = await turso.execute("UPDATE Users SET name = ? WHERE id = ?", [name, id]);
+      const user = await turso.execute(
+        "UPDATE Users SET name = ? WHERE id = ?",
+        [name, id]
+      );
       return user;
     } catch (error) {
       console.log(error);
@@ -125,6 +141,9 @@ export const getUserOrgIdAndRole = async () => {
   if (!email) {
     throw new Error("Invalid token");
   }
-  const user = await turso.execute("SELECT organization_id, role FROM Users WHERE email = ?", [email]);
+  const user = await turso.execute(
+    "SELECT organization_id, role FROM Users WHERE email = ?",
+    [email]
+  );
   return user;
 };
