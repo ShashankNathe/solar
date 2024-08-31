@@ -1,8 +1,7 @@
 import Link from "next/link";
 import React from "react";
-import { login } from "../actions/auth";
 import LoginForm from "@/components/LoginForm";
-
+import { login } from "@/app/actions/auth";
 const page = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center">

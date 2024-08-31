@@ -46,7 +46,7 @@ const Navbar = async () => {
           </Link>
           {isLoggedIn ? (
             <Link href="/dashboard">
-              <Button>Dashboard</Button>
+              <Button className="rounded-full">Dashboard</Button>
             </Link>
           ) : (
             <>
@@ -54,7 +54,7 @@ const Navbar = async () => {
                 <Button variant="ghost">Login</Button>
               </Link>
               <Link href="/signup">
-                <Button>Sign Up</Button>
+                <Button className="rounded-full">Sign Up</Button>
               </Link>
             </>
           )}
