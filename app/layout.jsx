@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/toaster";
+import Image from "next/image";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -24,7 +25,9 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <nav className="m-3 w-11/12 max-w-7xl mx-auto rounded-full fixed top-0 left-0 right-0 z-50 bg-white bg-opacity-70 backdrop-blur-md shadow">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div className="text-2xl font-bold text-blue-600">Solar CRM</div>
+            <div className="text-2xl font-bold text-blue-600 flex items-center gap-2">
+              <Image src={"/favicon.ico"} width={20} height={20} alt="logo" />
+            </div>
             <div className="hidden md:flex space-x-4">
               <Link href="/">
                 <Button variant="ghost">Home</Button>

@@ -27,12 +27,12 @@ export default function Home() {
 
             <div className="mt-12 relative">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 transform skew-y-3 rounded-3xl shadow-2xl"></div>
-              <div className="relative bg-white p-4 rounded-2xl shadow-lg">
+              <div className="relative bg-white p-4 rounded-2xl shadow-lg flex items-center justify-center">
                 <Image
-                  src="/app-screenshot.png"
+                  src="/favicon.ico"
                   alt="Solar CRM Dashboard"
-                  width={800}
-                  height={450}
+                  width={50}
+                  height={50}
                   className="rounded-lg"
                 />
               </div>
