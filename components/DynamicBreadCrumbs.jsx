@@ -19,7 +19,7 @@ const DynamicBreadCrumbs = () => {
     pathNames.pop();
   }
   return (
-    <Breadcrumb className="hidden md:flex">
+    <Breadcrumb className="flex sm:flex">
       <BreadcrumbList>
         {pathNames.map((name, index) => {
           return (
