@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import DynamicBreadCrumbs from "@/components/DynamicBreadcrumbs";
 
 const NavItem = ({ href, children }) => (
   <li>
@@ -35,8 +36,8 @@ export default function Layout({ children }) {
     <div className="flex h-screen text-sm">
       <Sidebar />
       <div className="flex-1 flex flex-col">
-        <header className="p-2">
-          <div className="text-lg">Breadcrumbs go here</div>
+        <header className="p-2 flex items-center justify-center">
+          <DynamicBreadCrumbs />
         </header>
 
         <main className="flex-1 overflow-y-auto bg-slate-50 rounded border m-1 ps-4 py-2 pe-0">
