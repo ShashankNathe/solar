@@ -3,7 +3,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
-import { Button } from "./ui/button";
 
 const NavItem = ({ href, children }) => (
   <li>

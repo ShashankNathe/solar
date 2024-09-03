@@ -1,20 +1,51 @@
+"use server";
+import { verify } from "jsonwebtoken";
 import { turso } from "./database";
+import { cookies } from "next/headers";
 
 export const getOrganizations = async () => {
   const organizations = await turso.execute("SELECT * FROM Organizations");
   return organizations;
 };
 
-export const createOrganization = async (name, user_id) => {
-  if (!name || !user_id) {
+export const createOrganization = async (name) => {
+  if (!name) {
     throw new Error("Missing required fields");
   }
+
+  const cookieStore = cookies();
+  const token = cookieStore.get("token");
+
+  if (!token) {
+    return { status: "error", message: "Unauthorized" };
+  }
+
+  const decodedToken = verify(token.value, process.env.JWT_SECRET);
+  const userEmail = decodedToken.email;
+
+  const userResult = await turso.execute(
+    "SELECT id FROM Users WHERE email = ?",
+    [userEmail]
+  );
+
+  if (!userResult.rows || userResult.rows.length === 0) {
+    return { status: "error", message: "User not found" };
+  }
+
+  const user_id = userResult.rows[0].id;
   try {
-    const organization = await turso.execute("INSERT INTO Organizations (name, owner_id) VALUES (?, ?)", [name, user_id]);
-    return organization;
+    const organization = await turso.execute(
+      "INSERT INTO Organizations (name, owner_id) VALUES (?, ?)",
+      [name, user_id]
+    );
+    await turso.execute("UPDATE Users SET organization_id = ? WHERE id = ?", [
+      Number(organization.lastInsertRowid),
+      user_id,
+    ]);
+    return { status: "success", data: Number(organization.lastInsertRowid) };
   } catch (error) {
     console.log(error);
-    throw new Error("Error creating organization");
+    return { status: "error", message: "Error creating organization" };
   }
 };
 
@@ -23,7 +54,10 @@ export const updateOrganization = async (id, name) => {
     throw new Error("Missing required fields");
   }
   try {
-    const organization = await turso.execute("UPDATE Organizations SET name = ? WHERE id = ?", [name, id]);
+    const organization = await turso.execute(
+      "UPDATE Organizations SET name = ? WHERE id = ?",
+      [name, id]
+    );
     return organization;
   } catch (error) {
     console.log(error);
@@ -36,7 +70,10 @@ export const getOrganizationById = async (id) => {
     throw new Error("Missing required fields");
   }
   try {
-    const organization = await turso.execute("SELECT * FROM Organizations WHERE id = ?", [id]);
+    const organization = await turso.execute(
+      "SELECT * FROM Organizations WHERE id = ?",
+      [id]
+    );
     return organization;
   } catch (error) {
     console.log(error);
@@ -49,7 +86,10 @@ export const getOrganizationUsers = async (id) => {
     throw new Error("Missing required fields");
   }
   try {
-    const users = await turso.execute("SELECT id, name, email, role FROM Users WHERE organization_id = ?", [id]);
+    const users = await turso.execute(
+      "SELECT id, name, email, role FROM Users WHERE organization_id = ?",
+      [id]
+    );
     return users;
   } catch (error) {
     console.log(error);
@@ -62,7 +102,10 @@ export const addUserToOrganization = async (user_id, org_id) => {
     throw new Error("Missing required fields");
   }
   try {
-    const user = await turso.execute("UPDATE Users SET organization_id = ? WHERE id = ?", [org_id, user_id]);
+    const user = await turso.execute(
+      "UPDATE Users SET organization_id = ? WHERE id = ?",
+      [org_id, user_id]
+    );
     return user;
   } catch (error) {
     console.log(error);

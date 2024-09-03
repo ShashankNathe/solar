@@ -130,20 +130,10 @@ export const getUserById = async (id) => {
   }
 };
 
-export const getUserOrgIdAndRole = async () => {
-  const cookieStore = cookies();
-  const token = cookieStore.get("token");
-  if (!token) {
-    throw new Error("Missing required fields");
-  }
-
-  const { email } = verify(token, process.env.JWT_SECRET);
-  if (!email) {
-    throw new Error("Invalid token");
-  }
+export const getUserOrgIdAndRole = async (email) => {
   const user = await turso.execute(
     "SELECT organization_id, role FROM Users WHERE email = ?",
     [email]
   );
-  return user;
+  return { status: "success", data: user.rows };
 };
