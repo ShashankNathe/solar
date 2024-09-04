@@ -1,60 +1,69 @@
-"use client";
-import React, { useState } from "react";
+import React from "react";
+
+const NewLeadForm = () => {
+  return (
+    <form className="max-w-md mx-auto mt-8">
+      <h2 className="text-2xl font-bold mb-4">Create New Lead</h2>
+      <div className="mb-4">
+        <label htmlFor="name" className="block mb-2">
+          Name
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          className="w-full px-3 py-2 border rounded"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="email" className="block mb-2">
+          Email
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          className="w-full px-3 py-2 border rounded"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="phone" className="block mb-2">
+          Phone
+        </label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          className="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="company" className="block mb-2">
+          Company
+        </label>
+        <input
+          type="text"
+          id="company"
+          name="company"
+          className="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      <button
+        type="submit"
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        Create Lead
+      </button>
+    </form>
+  );
+};
 
 const Page = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form data submitted:", formData);
-  };
-
   return (
-    <div>
-      <h1>Create New Lead</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Phone:</label>
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-          />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+    <div className="container mx-auto px-4">
+      <NewLeadForm />
     </div>
   );
 };
