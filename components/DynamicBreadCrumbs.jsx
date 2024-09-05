@@ -19,20 +19,20 @@ const DynamicBreadCrumbs = () => {
     pathNames.pop();
   }
   return (
-    <Breadcrumb className="flex sm:flex">
+    <Breadcrumb className="flex sm:flex text-white">
       <BreadcrumbList>
         {pathNames.map((name, index) => {
           return (
             <React.Fragment key={index}>
               <BreadcrumbItem>
                 {index < pathNames.length - 1 ? (
-                  <BreadcrumbLink asChild>
-                    <Link href={`/${name}`}>
+                  <BreadcrumbLink asChild className="text-white">
+                    <Link href={`/${name}`} className="text-white">
                       {name.charAt(0).toUpperCase() + name.slice(1)}
                     </Link>
                   </BreadcrumbLink>
                 ) : (
-                  <BreadcrumbPage>
+                  <BreadcrumbPage className="text-white">
                     {name.charAt(0).toUpperCase() + name.slice(1)}
                   </BreadcrumbPage>
                 )}

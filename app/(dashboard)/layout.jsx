@@ -1,10 +1,10 @@
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import DynamicBreadCrumbs from "@/components/DynamicBreadcrumbs";
-import Sidebar from "@/components/Sidebar";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { getUserOrgIdAndRole } from "@/app/actions/auth";
+import Sidebar from "@/components/Sidebar";
 
 export default async function Layout({ children }) {
   const getUser = async () => {
@@ -40,14 +40,15 @@ export default async function Layout({ children }) {
 
   const user = await getUser();
   return (
-    <div className="flex h-screen text-sm relative">
+    <div className="flex h-screen text-sm relative bg-[#161618] text-white">
+      {/* <Sidebar user={user} /> */}
       <Sidebar user={user} />
       <div className="flex-1 flex flex-col">
         <header className="p-2 flex items-center justify-center">
           <DynamicBreadCrumbs />
         </header>
 
-        <main className="flex-1 overflow-y-auto bg-slate-50 rounded border m-1 ps-4 py-2 pe-0">
+        <main className="flex-1 overflow-y-auto bg-[#1c1c1e] rounded m-1 py-2 pe-0 ">
           <ScrollArea className="h-full">{children}</ScrollArea>
         </main>
       </div>
