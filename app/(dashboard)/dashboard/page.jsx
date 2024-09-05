@@ -1,9 +1,6 @@
 import React from "react";
-import { logout } from "@/app/actions/auth";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DashboardChart from "@/components/DashboardChart";
-import DashboardChart2 from "@/components/DashboardChart2";
 
 const mockCardData = [
   { title: "Leads last 30 days", value: "1,234" },
@@ -22,7 +19,7 @@ const page = async () => {
     <div className="p-3 md:p-6 space-y-6 text-white">
       <div className="grid grid-cols-4 gap-3">
         <div className=" bg-[#161618] p-4 rounded-lg shadow col-span-4 md:col-span-3">
-          <DashboardChart2 className="h-40" />
+          <DashboardChart className="h-40" />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-1 gap-4 col-span-4 md:col-span-1">

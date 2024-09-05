@@ -92,7 +92,7 @@ export default function Sidebar({ user }) {
                 <nav className="space-y-1">
                   <Link
                     href="/leads"
-                    className="flex items-center space-x-2 py-1 px-2 rounded-md bg-[#2b2b2d]"
+                    className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
                   >
                     <List size={18} />
                     <span>All leads</span>
