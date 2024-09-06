@@ -6,7 +6,10 @@ export const getLeads = async (org_id) => {
     throw new Error("Missing required fields");
   }
   try {
-    const leads = await turso.execute("SELECT * FROM Leads WHERE organization_id = ?", [org_id]);
+    const leads = await turso.execute(
+      "SELECT * FROM Leads WHERE organization_id = ?",
+      [org_id]
+    );
     return leads;
   } catch (error) {
     console.log(error);
@@ -19,7 +22,10 @@ export const createLead = async (name, email, phone, org_id) => {
     throw new Error("Missing required fields");
   }
   try {
-    const lead = await turso.execute("INSERT INTO Leads (name, email, phone, organization_id) VALUES (?, ?, ?, ?)", [name, email, phone, org_id]);
+    const lead = await turso.execute(
+      "INSERT INTO Leads (name, email, phone, organization_id) VALUES (?, ?, ?, ?)",
+      [name, email, phone, org_id]
+    );
     return lead;
   } catch (error) {
     console.log(error);
@@ -32,7 +38,10 @@ export const updateLead = async (id, name, email, phone) => {
     throw new Error("Missing required fields");
   }
   try {
-    const lead = await turso.execute("UPDATE Leads SET name = ?, email = ?, phone = ? WHERE id = ?", [name, email, phone, id]);
+    const lead = await turso.execute(
+      "UPDATE Leads SET name = ?, email = ?, phone = ? WHERE id = ?",
+      [name, email, phone, id]
+    );
     return lead;
   } catch (error) {
     console.log(error);
@@ -42,14 +51,18 @@ export const updateLead = async (id, name, email, phone) => {
 
 export const getLeadById = async (id) => {
   if (!id) {
-    throw new Error("Missing required fields");
+    return { status: "error", message: "Missing required fields" };
   }
   try {
     const lead = await turso.execute("SELECT * FROM Leads WHERE id = ?", [id]);
-    return lead;
+    if (lead && lead.rows && lead.rows.length > 0) {
+      return { status: "success", data: lead.rows };
+    } else {
+      return { status: "error", message: "Lead not found" };
+    }
   } catch (error) {
     console.log(error);
-    throw new Error("Error getting lead");
+    return { status: "error", message: "Error getting lead" };
   }
 };
 
@@ -78,7 +91,10 @@ export const getCurrentUserLeads = async () => {
   }
 
   try {
-    const leads = await turso.execute("SELECT * FROM Leads WHERE organization_id = ? AND owner_id = ?", [current_user.organization_id, current_user.id]);
+    const leads = await turso.execute(
+      "SELECT * FROM Leads WHERE organization_id = ? AND owner_id = ?",
+      [current_user.organization_id, current_user.id]
+    );
     return leads;
   } catch (error) {
     console.log(error);
