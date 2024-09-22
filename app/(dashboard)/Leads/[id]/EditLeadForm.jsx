@@ -51,7 +51,7 @@ const EditLeadForm = ({ lead, updateLead }) => {
         }
       }}
     >
-      <Card className="bg-[#161618] text-white border-0">
+      <Card className="bg-transparent text-white border-0">
         <CardHeader>
           <CardTitle>Lead Details</CardTitle>
         </CardHeader>

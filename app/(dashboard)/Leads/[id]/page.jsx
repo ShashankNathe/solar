@@ -35,6 +35,10 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import EditLeadForm from "./EditLeadForm";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AddTaskForm from "./AddTaskForm";
+import { addTask, deleteTask, getTasksByLead } from "@/app/actions/tasks";
+import TaskList from "./TaskList";
 
 const page = async ({ params }) => {
   const formatStatus = (status) => {
@@ -62,6 +66,8 @@ const page = async ({ params }) => {
   };
   const leadData = await getLeadById(params.id);
   const lead = leadData.data[0];
+  const tasks = await getTasksByLead(params.id);
+
   // console.log(lead);
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
@@ -96,10 +102,34 @@ const page = async ({ params }) => {
         </CardContent>
       </Card>
 
-      <EditLeadForm
-        lead={JSON.parse(JSON.stringify(lead))}
-        updateLead={updateLead}
-      />
+      <Tabs defaultValue="details">
+        <div className="flex items-center">
+          <TabsList className="bg-[#161618]">
+            <TabsTrigger className="bg-[#1c1c1e] " value="details">
+              Details
+            </TabsTrigger>
+            <TabsTrigger className="bg-[#1c1c1e] " value="tasks">
+              Tasks
+            </TabsTrigger>
+          </TabsList>
+        </div>
+        <TabsContent className="bg-[#161618] rounded-lg" value="details">
+          <EditLeadForm
+            lead={JSON.parse(JSON.stringify(lead))}
+            updateLead={updateLead}
+          />
+        </TabsContent>
+        <TabsContent className="bg-[#161618] rounded-lg p-2 py-4" value="tasks">
+          <AddTaskForm
+            lead={JSON.parse(JSON.stringify(lead))}
+            addTask={addTask}
+          />
+          <TaskList
+            tasks={JSON.parse(JSON.stringify(tasks.data))}
+            deleteTask={deleteTask}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
