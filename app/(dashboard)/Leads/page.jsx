@@ -1,100 +1,57 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
-const mockLeadsData = {
-  last30Days: 145,
-  total: 1250,
-  conversionRate: 12.5,
-  recentLeads: [
-    { id: 1, name: "John Doe", email: "john@example.com", date: "2023-04-15" },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      date: "2023-04-14",
-    },
-    {
-      id: 3,
-      name: "Bob Johnson",
-      email: "bob@example.com",
-      date: "2023-04-13",
-    },
-    {
-      id: 4,
-      name: "Alice Brown",
-      email: "alice@example.com",
-      date: "2023-04-12",
-    },
-    {
-      id: 5,
-      name: "Charlie Wilson",
-      email: "charlie@example.com",
-      date: "2023-04-11",
-    },
-  ],
-};
+import { deleteLead, getLeads } from "@/app/actions/leads";
+import LeadsTable from "./LeadsTable";
 
-const LeadsPage = () => {
+const LeadsPage = async () => {
+  const leads = await getLeads();
+  const totalCount = leads.data.length;
+  const last30DaysCount = leads.data.filter(
+    (lead) => new Date() - new Date(lead.created_at) <= 30 * 24 * 60 * 60 * 1000
+  ).length;
+  const conversionRate =
+    (leads.data.filter(
+      (lead) => lead.status !== "new" && lead.status !== "lost"
+    ).length /
+      totalCount) *
+    100;
   return (
     <div className="p-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <Card>
+        <Card className="border-0 bg-[#161618] text-white">
           <CardHeader>
             <CardTitle>Leads (Past 30 Days)</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-semibold">{mockLeadsData.last30Days}</p>
+            <p className="text-3xl font-semibold">{last30DaysCount}</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 bg-[#161618] text-white">
           <CardHeader>
             <CardTitle>Total Leads</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-semibold">{mockLeadsData.total}</p>
+            <p className="text-3xl font-semibold">{totalCount}</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-0 bg-[#161618] text-white">
           <CardHeader>
             <CardTitle>Conversion Rate</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-semibold">
-              {mockLeadsData.conversionRate}%
-            </p>
+            <p className="text-3xl font-semibold">{conversionRate}%</p>
           </CardContent>
         </Card>
       </div>
 
-      <h2 className="text-2xl font-semibold mb-4">Recent Leads</h2>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Date</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {mockLeadsData.recentLeads.map((lead) => (
-            <TableRow key={lead.id}>
-              <TableCell>{lead.name}</TableCell>
-              <TableCell>{lead.email}</TableCell>
-              <TableCell>{lead.date}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <h2 className="text-2xl font-semibold mb-4">Leads</h2>
+      <LeadsTable
+        leads={JSON.parse(JSON.stringify(leads))}
+        deleteLead={deleteLead}
+      />
     </div>
   );
 };

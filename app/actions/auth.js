@@ -132,11 +132,12 @@ export const getUserById = async (id) => {
 
 export const getUserOrgIdAndRole = async (email) => {
   const user = await turso.execute(
-    `SELECT u.organization_id, u.role, u.name, o.name AS organization_name 
+    `SELECT u.id, u.organization_id, u.role, u.name, o.name AS organization_name 
      FROM Users u
      JOIN Organizations o ON u.organization_id = o.id 
      WHERE u.email = ?`,
     [email]
   );
+
   return { status: "success", data: user.rows };
 };
