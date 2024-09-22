@@ -155,7 +155,7 @@ export default function Sidebar({ user }) {
 
         {/* Bottom Part */}
         <div className="p-4 flex-shrink-0">
-          <div className="text-xs text-gray-500 mb-2">TRY</div>
+          {/* <div className="text-xs text-gray-500 mb-2">TRY</div> */}
           <nav className="space-y-1">
             <Link
               href="/settings"

@@ -22,18 +22,26 @@ const DynamicBreadCrumbs = () => {
     <Breadcrumb className="flex sm:flex text-white">
       <BreadcrumbList>
         {pathNames.map((name, index) => {
+          const isUUID =
+            /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+              name
+            );
           return (
             <React.Fragment key={index}>
               <BreadcrumbItem>
                 {index < pathNames.length - 1 ? (
                   <BreadcrumbLink asChild className="text-white">
                     <Link href={`/${name}`} className="text-white">
-                      {name.charAt(0).toUpperCase() + name.slice(1)}
+                      {isUUID
+                        ? "Details"
+                        : name.charAt(0).toUpperCase() + name.slice(1)}
                     </Link>
                   </BreadcrumbLink>
                 ) : (
                   <BreadcrumbPage className="text-white">
-                    {name.charAt(0).toUpperCase() + name.slice(1)}
+                    {isUUID
+                      ? "Details"
+                      : name.charAt(0).toUpperCase() + name.slice(1)}
                   </BreadcrumbPage>
                 )}
               </BreadcrumbItem>

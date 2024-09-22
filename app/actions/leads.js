@@ -228,19 +228,125 @@ export const createLead = async (leadData) => {
   }
 };
 
-export const updateLead = async (id, name, email, phone) => {
+export const updateLead = async (leadData) => {
+  // console.log(leadData);
+  const id = leadData.get("id");
+  const name = leadData.get("name");
+  const status = leadData.get("status");
+  const email = leadData.get("email");
+  const phone = leadData.get("phone");
+  const address = leadData.get("address");
+  const description = leadData.get("description");
+  const next_action = leadData.get("next_action");
+  const next_action_scheduled_on = leadData.get("next_action_scheduled_on");
+  const notes = leadData.get("notes");
+  const site_address = leadData.get("site_address");
+  const solution_type = leadData.get("solution_type");
+  const date_of_installation = leadData.get("date_of_installation");
+  const free_area_roof = leadData.get("free_area_roof");
+  const free_area_ground = leadData.get("free_area_ground");
+  const roof_type = leadData.get("roof_type");
+  const roof_angle = leadData.get("roof_angle");
+  const panel_capacity = leadData.get("panel_capacity");
+  const panel_quantity = leadData.get("panel_quantity");
+  const inverter_capacity = leadData.get("inverter_capacity");
+  const inverter_quantity = leadData.get("inverter_quantity");
+  const price = leadData.get("price");
+
+  // Required fields check
   if (!id || !name || !email || !phone) {
-    throw new Error("Missing required fields");
+    return { status: "error", message: "Missing required fields" };
   }
+
+  // Start building the query dynamically
+  let query = "UPDATE Leads SET name = ?, email = ?, phone = ?";
+  let values = [name, email, phone];
+
+  // Add optional fields only if they are provided
+  if (status) {
+    query += ", status = ?";
+    values.push(status);
+  }
+  if (address) {
+    query += ", address = ?";
+    values.push(address);
+  }
+  if (description) {
+    query += ", description = ?";
+    values.push(description);
+  }
+  if (next_action) {
+    query += ", next_action = ?";
+    values.push(next_action);
+  }
+  if (next_action_scheduled_on) {
+    query += ", next_action_scheduled_on = ?";
+    values.push(next_action_scheduled_on);
+  }
+  if (notes) {
+    query += ", notes = ?";
+    values.push(notes);
+  }
+  if (site_address) {
+    query += ", site_address = ?";
+    values.push(site_address);
+  }
+  if (solution_type) {
+    query += ", solution_type = ?";
+    values.push(solution_type);
+  }
+  if (date_of_installation) {
+    query += ", date_of_installation = ?";
+    values.push(date_of_installation);
+  }
+  if (free_area_roof) {
+    query += ", free_area_roof = ?";
+    values.push(free_area_roof);
+  }
+  if (free_area_ground) {
+    query += ", free_area_ground = ?";
+    values.push(free_area_ground);
+  }
+  if (roof_type) {
+    query += ", roof_type = ?";
+    values.push(roof_type);
+  }
+  if (roof_angle) {
+    query += ", roof_angle = ?";
+    values.push(roof_angle);
+  }
+  if (panel_capacity) {
+    query += ", panel_capacity = ?";
+    values.push(panel_capacity);
+  }
+  if (panel_quantity) {
+    query += ", panel_quantity = ?";
+    values.push(panel_quantity);
+  }
+  if (inverter_capacity) {
+    query += ", inverter_capacity = ?";
+    values.push(inverter_capacity);
+  }
+  if (inverter_quantity) {
+    query += ", inverter_quantity = ?";
+    values.push(inverter_quantity);
+  }
+  if (price) {
+    query += ", price = ?";
+    values.push(price);
+  }
+
+  query += " WHERE id = ?";
+  values.push(id);
+
   try {
-    const lead = await turso.execute(
-      "UPDATE Leads SET name = ?, email = ?, phone = ? WHERE id = ?",
-      [name, email, phone, id]
-    );
-    return lead;
+    const lead = await turso.execute(query, values);
+    revalidatePath(`/leads/${id}`);
+    revalidatePath("/leads");
+    return { status: "success", data: [] };
   } catch (error) {
     console.log(error);
-    throw new Error("Error updating lead");
+    return { status: "error", message: "Error updating lead" };
   }
 };
 
