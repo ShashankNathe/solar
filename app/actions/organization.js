@@ -2,6 +2,7 @@
 import { verify } from "jsonwebtoken";
 import { turso } from "./database";
 import { cookies } from "next/headers";
+import { getUserOrgIdAndRole } from "./auth";
 
 export const getOrganizations = async () => {
   const organizations = await turso.execute("SELECT * FROM Organizations");
@@ -81,19 +82,69 @@ export const getOrganizationById = async (id) => {
   }
 };
 
-export const getOrganizationUsers = async (id) => {
-  if (!id) {
-    throw new Error("Missing required fields");
-  }
+export const getOrganizationUsers = async () => {
   try {
+    // Retrieve and verify token
+    const cookieStore = cookies();
+    const token = cookieStore.get("token");
+
+    if (!token) {
+      return {
+        status: "error",
+        message: "Unauthorized, token not found",
+      };
+    }
+
+    const decodedToken = verify(token.value, process.env.JWT_SECRET);
+    const userEmail = decodedToken.email;
+
+    if (!userEmail) {
+      return {
+        status: "error",
+        message: "Unauthorized, invalid token",
+      };
+    }
+
+    // Get organization ID based on user's email or role
+    const currentUser = await getUserOrgIdAndRole(userEmail);
+
+    if (
+      !currentUser ||
+      !currentUser.data ||
+      !currentUser.data[0] ||
+      !currentUser.data[0].organization_id
+    ) {
+      return {
+        status: "error",
+        message: "Unauthorized, organization not found",
+      };
+    }
+
+    const organization_id = currentUser.data[0].organization_id;
+
+    // Fetch users for the organization
     const users = await turso.execute(
       "SELECT id, name, email, role FROM Users WHERE organization_id = ?",
-      [id]
+      [organization_id]
     );
-    return users;
+
+    if (users.rows.length === 0) {
+      return {
+        status: "error",
+        message: "No users found for the given organization",
+      };
+    }
+
+    return {
+      status: "success",
+      data: users.rows,
+    };
   } catch (error) {
     console.log(error);
-    throw new Error("Error getting organization users");
+    return {
+      status: "error",
+      message: "Error getting organization users",
+    };
   }
 };
 
