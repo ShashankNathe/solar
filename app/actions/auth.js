@@ -3,6 +3,7 @@ import { compare, hash } from "bcryptjs";
 import { sign, verify } from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { turso } from "./database";
+import { redirect } from "next/navigation";
 
 export const register = async (name, email, password) => {
   const userResult = await turso.execute(
@@ -78,6 +79,8 @@ export const logout = async () => {
     maxAge: 0,
     sameSite: "strict",
   });
+
+  redirect("/login");
 };
 
 export const updateUser = async (id, name, role) => {

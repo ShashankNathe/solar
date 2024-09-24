@@ -23,6 +23,7 @@ import {
   SheetTitle,
   SheetDescription,
 } from "./ui/sheet";
+import LogoutBtn from "./LogoutBtn";
 
 export default function Sidebar({ user }) {
   const [workspaceOpen, setWorkspaceOpen] = useState(true);
@@ -164,13 +165,12 @@ export default function Sidebar({ user }) {
               <Settings size={18} />
               <span>Settings</span>
             </Link>
-            <Link
-              href="/logout"
-              className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
-            >
+            <div className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]">
               <LogOut size={18} />
-              <span>Logout</span>
-            </Link>
+              <span>
+                <LogoutBtn />
+              </span>
+            </div>
           </nav>
         </div>
       </div>
@@ -224,13 +224,12 @@ export default function Sidebar({ user }) {
             <Settings size={18} />
             <span>Settings</span>
           </Link>
-          <Link
-            href="/logout"
-            className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
-          >
+          <div className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]">
             <LogOut size={18} />
-            <span>Logout</span>
-          </Link>
+            <span>
+              <LogoutBtn />
+            </span>
+          </div>
         </nav>
       </SheetContent>
     </Sheet>
