@@ -74,15 +74,15 @@ export default function Sidebar({ user }) {
           <div className="overflow-y-auto p-4">
             <div className="mb-4">
               <button
-                onClick={() => setWorkspaceOpen(!workspaceOpen)}
-                className="flex items-center justify-between w-full text-xs text-gray-500 mb-2 hover:text-gray-300"
+                // onClick={() => setWorkspaceOpen(!workspaceOpen)}
+                className="flex items-center justify-between w-full text-xs text-gray-500 mb-2"
               >
                 <span>Leads</span>
-                {workspaceOpen ? (
+                {/* {workspaceOpen ? (
                   <ChevronDown size={14} />
                 ) : (
                   <ChevronRight size={14} />
-                )}
+                )} */}
               </button>
               <div
                 ref={workspaceRef}
@@ -110,15 +110,15 @@ export default function Sidebar({ user }) {
 
             <div className="mb-4">
               <button
-                onClick={() => setTeamsOpen(!teamsOpen)}
-                className="flex items-center justify-between w-full text-xs text-gray-500 mb-2 hover:text-gray-300"
+                // onClick={() => setTeamsOpen(!teamsOpen)}
+                className="flex items-center justify-between w-full text-xs text-gray-500 mb-2 "
               >
                 <span>Tasks</span>
-                {teamsOpen ? (
+                {/* {teamsOpen ? (
                   <ChevronDown size={14} />
                 ) : (
                   <ChevronRight size={14} />
-                )}
+                )} */}
               </button>
               <div
                 ref={teamsRef}
@@ -133,7 +133,7 @@ export default function Sidebar({ user }) {
                     <List size={18} />
                     <span>All Tasks</span>
                   </Link>
-                  <Link
+                  {/* <Link
                     href="/tasks?status=active"
                     className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
                   >
@@ -146,7 +146,7 @@ export default function Sidebar({ user }) {
                   >
                     <CheckCircle size={18} />
                     <span>Completed tasks</span>
-                  </Link>
+                  </Link> */}
                 </nav>
               </div>
             </div>

@@ -72,7 +72,7 @@ export const addTask = async (taskData) => {
   }
 };
 
-export const editTask = async (id, taskData) => {
+export const editTask = async (id, lead_id, taskData) => {
   const name = taskData.get("name");
   const status = taskData.get("status");
   const description = taskData.get("description");
@@ -124,6 +124,8 @@ export const editTask = async (id, taskData) => {
   // Execute the query
   try {
     const task = await turso.execute(query, values);
+    revalidatePath(`/leads/${lead_id}`);
+    revalidatePath(`/leads/${lead_id}/${id}`);
     return { status: "success", data: task.rows };
   } catch (error) {
     console.log(error);
@@ -192,5 +194,69 @@ export const getTasksByOrganization = async (organization_id) => {
   } catch (error) {
     console.log(error);
     throw new Error("Error retrieving tasks for organization");
+  }
+};
+
+export const getTaskById = async (id) => {
+  if (!id) {
+    throw new Error("Missing required fields: id");
+  }
+
+  try {
+    const task = await turso.execute("SELECT * FROM Tasks WHERE id = ?", [id]);
+    if (task.rows.length === 0) {
+      return { status: "error", message: "Task not found" };
+    }
+    return { status: "success", data: task.rows[0] };
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error retrieving task by ID");
+  }
+};
+
+export const getTasks = async () => {
+  const cookieStore = cookies();
+  const token = cookieStore.get("token");
+  const decodedToken = verify(token.value, process.env.JWT_SECRET);
+  const userEmail = decodedToken.email;
+
+  if (!userEmail) {
+    return { status: "error", message: "Unauthorized" };
+  }
+
+  const current_user = await getUserOrgIdAndRole(userEmail);
+
+  if (
+    !current_user ||
+    !current_user.data ||
+    !current_user.data[0] ||
+    !current_user.data[0].role
+  ) {
+    return {
+      status: "error",
+      message: "Unauthorized",
+    };
+  }
+
+  const userRole = current_user.data[0].role;
+  const userId = current_user.data[0].id;
+  const org_id = current_user.data[0].organization_id;
+  try {
+    let tasks;
+    if (userRole === "admin") {
+      tasks = await turso.execute(
+        "SELECT * FROM Tasks WHERE organization_id = ?",
+        [org_id]
+      );
+    } else {
+      tasks = await turso.execute(
+        "SELECT * FROM Tasks WHERE organization_id = ? AND owner = ?",
+        [org_id, userId]
+      );
+    }
+    return { status: "success", data: tasks.rows };
+  } catch (error) {
+    console.log(error);
+    return { status: "error", message: "Error getting tasks" };
   }
 };

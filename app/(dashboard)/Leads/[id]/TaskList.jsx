@@ -77,7 +77,7 @@ const TaskList = ({ tasks, deleteTask }) => {
               </TableCell>
               <TableCell>
                 <Link href={`/leads/${task.lead_id}/${task.id}`}>
-                  {task.priority}
+                  {formatStatus(task.priority)}
                 </Link>
               </TableCell>
               <TableCell>

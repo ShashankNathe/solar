@@ -104,7 +104,7 @@ const page = async ({ params }) => {
 
       <Tabs defaultValue="details">
         <div className="flex items-center">
-          <TabsList className="bg-[#161618]">
+          <TabsList className="bg-[#161618] gap-2">
             <TabsTrigger className="bg-[#1c1c1e] " value="details">
               Details
             </TabsTrigger>
