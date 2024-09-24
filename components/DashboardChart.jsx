@@ -20,14 +20,14 @@ import {
 
 export const description = "A simple area chart";
 
-const chartData = [
-  { month: "January", leads: 186 },
-  { month: "February", leads: 305 },
-  { month: "March", leads: 237 },
-  { month: "April", leads: 73 },
-  { month: "May", leads: 209 },
-  { month: "June", leads: 214 },
-];
+// const chartData = [
+//   { month: "January", leads: 186 },
+//   { month: "February", leads: 305 },
+//   { month: "March", leads: 237 },
+//   { month: "April", leads: 73 },
+//   { month: "May", leads: 209 },
+//   { month: "June", leads: 214 },
+// ];
 
 const chartConfig = {
   desktop: {
@@ -36,7 +36,7 @@ const chartConfig = {
   },
 };
 
-export default function DashboardChart() {
+export default function DashboardChart({ chartData }) {
   return (
     <Card className="bg-transparent text-white border-0">
       <CardHeader>
@@ -81,11 +81,9 @@ export default function DashboardChart() {
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
             <div className="flex items-center gap-2 leading-none text-white/70">
-              January - June 2024
+              {chartData[0]["month"]} - {chartData[5]["month"]}{" "}
+              {new Date().getFullYear()}
             </div>
           </div>
         </div>

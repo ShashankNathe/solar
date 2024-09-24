@@ -399,3 +399,48 @@ export const getCurrentUserLeads = async () => {
     throw new Error("Error getting leads");
   }
 };
+
+export const getLatestLeads = async () => {
+  const cookieStore = cookies();
+  const token = cookieStore.get("token");
+  const decodedToken = verify(token.value, process.env.JWT_SECRET);
+  const userEmail = decodedToken.email;
+
+  if (!userEmail) {
+    return { status: "error", message: "Missing required fields" };
+  }
+  const current_user = await getUserOrgIdAndRole(userEmail);
+  if (
+    !current_user ||
+    !current_user.data ||
+    !current_user.data[0] ||
+    !current_user.data[0].role
+  ) {
+    return {
+      status: "error",
+      message: "Unauthorized",
+    };
+  }
+
+  const userRole = current_user.data[0].role;
+  const userId = current_user.data[0].id;
+  const org_id = current_user.data[0].organization_id;
+  try {
+    let leads;
+    if (userRole === "admin") {
+      leads = await turso.execute(
+        "SELECT * FROM Leads WHERE organization_id = ? ORDER BY created_at DESC LIMIT 5",
+        [org_id]
+      );
+    } else {
+      leads = await turso.execute(
+        "SELECT * FROM Leads WHERE organization_id = ? AND owner = ? ORDER BY created_at DESC LIMIT 5",
+        [org_id, userId]
+      );
+    }
+    return { status: "success", data: leads.rows };
+  } catch (error) {
+    console.log(error);
+    return { status: "error", message: "Error getting leads" };
+  }
+};
