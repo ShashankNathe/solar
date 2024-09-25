@@ -1,4 +1,5 @@
 "use server";
+import { revalidatePath } from "next/cache";
 import { getUserOrgIdAndRole } from "./auth";
 import { turso } from "./database";
 
@@ -9,22 +10,24 @@ export const getInvitations = async () => {
 
 export const getInvitationsByOrgId = async (org_id) => {
   if (!org_id) {
-    throw new Error("Missing required fields");
+    return { status: "error", message: "Missing required fields" }; // Updated error handling
   }
-  const invitations = await turso.execute(
-    "SELECT * FROM Invitations WHERE organization_id = ?",
-    [org_id]
-  );
-  return invitations;
+  try {
+    const invitations = await turso.execute(
+      "SELECT * FROM Invitations WHERE organization_id = ?",
+      [org_id]
+    );
+    return { status: "success", data: invitations.rows }; // Updated response format
+  } catch (error) {
+    console.log(error);
+    return { status: "error", message: "Error retrieving invitations" }; // Added error handling
+  }
 };
 
 export const createInvitation = async (email, org_id, invited_by) => {
-  const current_user = getUserOrgIdAndRole();
-  if (current_user.role !== "admin") {
-    throw new Error("Unauthorized");
-  }
   if (!email || !org_id || !invited_by) {
-    throw new Error("Missing required fields");
+    // throw new Error("Missing required fields");
+    return { status: "error", message: "Missing required fields" };
   }
 
   try {
@@ -32,10 +35,11 @@ export const createInvitation = async (email, org_id, invited_by) => {
       "INSERT INTO Invitations (email, organization_id, status, invited_by) VALUES (?, ?, ?, ?)",
       [email, org_id, "pending", invited_by]
     );
-    return invitation;
+    revalidatePath("/settings");
+    return { status: "success", data: [] };
   } catch (error) {
     console.log(error);
-    throw new Error("Error creating invitation");
+    return { status: "error", message: "Error creating invitation" };
   }
 };
 
@@ -51,7 +55,7 @@ export const updateInvitation = async (id, status) => {
     return invitation;
   } catch (error) {
     console.log(error);
-    throw new Error("Error updating invitation");
+    return { status: "error", message: "Error updating invitation" };
   }
 };
 

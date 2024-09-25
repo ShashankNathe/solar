@@ -5,15 +5,15 @@ import { deleteLead, getLeads } from "@/app/actions/leads";
 import LeadsTable from "./LeadsTable";
 
 const LeadsPage = async () => {
-  const leads = await getLeads();
-  const totalCount = leads.data.length;
-  const last30DaysCount = leads.data.filter(
+  const leadsData = await getLeads();
+  const leads = leadsData.data || [];
+  const totalCount = leads.length;
+  const last30DaysCount = leads.filter(
     (lead) => new Date() - new Date(lead.created_at) <= 30 * 24 * 60 * 60 * 1000
   ).length;
   const conversionRate =
-    (leads.data.filter(
-      (lead) => lead.status !== "new" && lead.status !== "lost"
-    ).length /
+    (leads.filter((lead) => lead.status !== "new" && lead.status !== "lost")
+      .length /
       totalCount) *
     100;
   return (

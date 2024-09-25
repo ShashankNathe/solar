@@ -6,7 +6,7 @@ import LeadsTable from "../leads/LeadsTable";
 
 const page = async () => {
   const leadsData = await getLeads();
-  const leads = leadsData.data;
+  const leads = leadsData.data || [];
   const today = new Date();
   const thirtyDaysAgo = new Date(today.setMonth(today.getMonth() - 1));
   const leadsInLast30Days = leads.filter(
@@ -83,7 +83,7 @@ const page = async () => {
       <div className="bg-[#161618] p-4 rounded-lg shadow">
         <h2 className="text-xl font-semibold mb-4">Latest Leads</h2>
         <LeadsTable
-          leads={JSON.parse(JSON.stringify({ data: latestLeads }))}
+          leads={JSON.parse(JSON.stringify(latestLeads))}
           deleteLead={deleteLead}
         />
       </div>

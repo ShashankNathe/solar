@@ -54,9 +54,9 @@ export default function Sidebar({ user }) {
         <div className="p-4 flex-shrink-0 pb-0">
           <div className="flex items-center space-x-2 mb-6">
             <div className="w-6 h-6 bg-teal-500 rounded-sm flex items-center justify-center text-white font-bold text-sm">
-              {user.orgName.split("")[0].toUpperCase()}
+              {user?.orgName.split("")[0].toUpperCase()}
             </div>
-            <span className="text-sm font-medium">{user.orgName}</span>
+            <span className="text-sm font-medium">{user?.orgName}</span>
           </div>
 
           <nav className="space-y-1">

@@ -65,7 +65,7 @@ const LeadsTable = ({ leads, deleteLead }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {leads.data.map((lead) => (
+          {leads.map((lead) => (
             <TableRow key={lead.id}>
               <TableCell>
                 <Link href={`/leads/${lead.id}`}>{lead.name}</Link>
