@@ -30,7 +30,7 @@ const RegisterForm = ({ register }) => {
                 description: "Welcome to Solar CRM!",
                 variant: "success",
               });
-              router.push("/dashboard");
+              router.push("/onboarding");
             }
           } catch (error) {
             console.error("Registration failed:", error);
