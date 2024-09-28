@@ -2,27 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import {
-  ChevronDown,
-  ChevronRight,
-  LayoutDashboard,
-  List,
-  PlusCircle,
-  CheckCircle,
-  Activity,
-  LogOut,
-  Settings,
-  Menu,
-} from "lucide-react";
+import { ChevronDown, ChevronRight, LayoutDashboard, List, PlusCircle, CheckCircle, Activity, LogOut, Settings, Menu } from "lucide-react";
 import { ScrollArea } from "./ui/scroll-area";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-} from "./ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetDescription } from "./ui/sheet";
 import LogoutBtn from "./LogoutBtn";
 
 export default function Sidebar({ user }) {
@@ -33,17 +15,13 @@ export default function Sidebar({ user }) {
 
   useEffect(() => {
     if (workspaceRef.current) {
-      workspaceRef.current.style.maxHeight = workspaceOpen
-        ? `${workspaceRef.current.scrollHeight}px`
-        : "0";
+      workspaceRef.current.style.maxHeight = workspaceOpen ? `${workspaceRef.current.scrollHeight}px` : "0";
     }
   }, [workspaceOpen]);
 
   useEffect(() => {
     if (teamsRef.current) {
-      teamsRef.current.style.maxHeight = teamsOpen
-        ? `${teamsRef.current.scrollHeight}px`
-        : "0";
+      teamsRef.current.style.maxHeight = teamsOpen ? `${teamsRef.current.scrollHeight}px` : "0";
     }
   }, [teamsOpen]);
 
@@ -53,17 +31,12 @@ export default function Sidebar({ user }) {
         {/* Top Part */}
         <div className="p-4 flex-shrink-0 pb-0">
           <div className="flex items-center space-x-2 mb-6">
-            <div className="w-6 h-6 bg-teal-500 rounded-sm flex items-center justify-center text-white font-bold text-sm">
-              {user?.orgName.split("")[0].toUpperCase()}
-            </div>
+            <div className="w-6 h-6 bg-teal-500 rounded-sm flex items-center justify-center text-white font-bold text-sm">{user?.orgName.split("")[0].toUpperCase()}</div>
             <span className="text-sm font-medium">{user?.orgName}</span>
           </div>
 
           <nav className="space-y-1">
-            <Link
-              href="/dashboard"
-              className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
-            >
+            <Link href="/dashboard" className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]">
               <LayoutDashboard size={18} />
               <span>Dashboard</span>
             </Link>
@@ -85,23 +58,13 @@ export default function Sidebar({ user }) {
                   <ChevronRight size={14} />
                 )} */}
               </button>
-              <div
-                ref={workspaceRef}
-                className="overflow-hidden transition-all duration-300 ease-in-out"
-                style={{ maxHeight: workspaceOpen ? "1000px" : "0" }}
-              >
+              <div ref={workspaceRef} className="overflow-hidden transition-all duration-300 ease-in-out" style={{ maxHeight: workspaceOpen ? "1000px" : "0" }}>
                 <nav className="space-y-1">
-                  <Link
-                    href="/leads"
-                    className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
-                  >
+                  <Link href="/leads" className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]">
                     <List size={18} />
                     <span>All leads</span>
                   </Link>
-                  <Link
-                    href="/leads/new"
-                    className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
-                  >
+                  <Link href="/leads/new" className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]">
                     <PlusCircle size={18} />
                     <span>Create new lead</span>
                   </Link>
@@ -121,16 +84,9 @@ export default function Sidebar({ user }) {
                   <ChevronRight size={14} />
                 )} */}
               </button>
-              <div
-                ref={teamsRef}
-                className="overflow-hidden transition-all duration-300 ease-in-out"
-                style={{ maxHeight: teamsOpen ? "1000px" : "0" }}
-              >
+              <div ref={teamsRef} className="overflow-hidden transition-all duration-300 ease-in-out" style={{ maxHeight: teamsOpen ? "1000px" : "0" }}>
                 <nav className="space-y-1">
-                  <Link
-                    href="/tasks"
-                    className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
-                  >
+                  <Link href="/tasks" className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]">
                     <List size={18} />
                     <span>All Tasks</span>
                   </Link>
@@ -158,10 +114,7 @@ export default function Sidebar({ user }) {
         <div className="p-4 flex-shrink-0">
           {/* <div className="text-xs text-gray-500 mb-2">TRY</div> */}
           <nav className="space-y-1">
-            <Link
-              href="/settings"
-              className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
-            >
+            <Link href="/settings" className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]">
               <Settings size={18} />
               <span>Settings</span>
             </Link>
@@ -189,38 +142,23 @@ export default function Sidebar({ user }) {
           <SheetDescription className="sr-only">Navigation</SheetDescription>
         </SheetHeader>
         <nav className="space-y-1 mt-10">
-          <Link
-            href="/dashboard"
-            className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
-          >
+          <Link href="/dashboard" className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]">
             <LayoutDashboard size={18} />
             <span>Dashboard</span>
           </Link>
-          <Link
-            href="/leads"
-            className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
-          >
+          <Link href="/leads" className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]">
             <List size={18} />
             <span>All leads</span>
           </Link>
-          <Link
-            href="/leads/new"
-            className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
-          >
+          <Link href="/leads/new" className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]">
             <PlusCircle size={18} />
             <span>Create new lead</span>
           </Link>
-          <Link
-            href="/tasks"
-            className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
-          >
+          <Link href="/tasks" className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]">
             <List size={18} />
             <span>All Tasks</span>
           </Link>
-          <Link
-            href="/settings"
-            className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]"
-          >
+          <Link href="/settings" className="flex items-center space-x-2 py-1 px-2 rounded-md hover:bg-[#1e1e20]">
             <Settings size={18} />
             <span>Settings</span>
           </Link>

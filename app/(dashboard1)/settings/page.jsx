@@ -5,10 +5,7 @@ import InvitationForm from "./InvitationForm";
 import { cookies } from "next/headers";
 import { verify } from "jsonwebtoken";
 import { getUserOrgIdAndRole } from "@/app/actions/auth";
-import {
-  createInvitation,
-  getInvitationsByOrgId,
-} from "@/app/actions/invitations";
+import { createInvitation, getInvitationsByOrgId } from "@/app/actions/invitations";
 
 const page = async () => {
   const users = await getOrganizationUsers();
@@ -28,24 +25,20 @@ const page = async () => {
       <Card className="bg-[#161618] border-0 text-white">
         <CardHeader>Team members</CardHeader>
         <CardContent>
-          <ul class="space-y-4">
+          <ul className="space-y-4">
             {users &&
               users.data &&
               users.data.map((user) => {
                 return (
-                  <li class="flex items-center justify-between" key={user.id}>
-                    <div class="flex items-center space-x-4 w-full">
-                      <span class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-                        <span class="flex h-full w-full items-center justify-center rounded-full bg-muted text-black">
-                          {user.name[0]}
-                        </span>
+                  <li className="flex items-center justify-between" key={user.id}>
+                    <div className="flex items-center space-x-4 w-full">
+                      <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
+                        <span className="flex h-full w-full items-center justify-center rounded-full bg-muted text-black">{user.name[0]}</span>
                       </span>
                       <div className="flex items-center justify-between w-full">
                         <div>
-                          <p class="font-medium">{user.name}</p>
-                          <p class="text-sm text-muted-foreground">
-                            {user.email}
-                          </p>
+                          <p className="font-medium">{user.name}</p>
+                          <p className="text-sm text-muted-foreground">{user.email}</p>
                         </div>
                         <span className="capitalize">{user.role}</span>
                       </div>
@@ -57,23 +50,19 @@ const page = async () => {
         </CardContent>
         <CardHeader>Invited members</CardHeader>
         <CardContent>
-          <ul class="space-y-4">
+          <ul className="space-y-4">
             {invites &&
               invites.map((user) => {
                 return (
-                  <li class="flex items-center justify-between" key={user.id}>
-                    <div class="flex items-center space-x-4 w-full">
-                      <span class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-                        <span class="flex h-full w-full items-center justify-center rounded-full bg-muted text-black">
-                          {user.email[0]}
-                        </span>
+                  <li className="flex items-center justify-between" key={user.id}>
+                    <div className="flex items-center space-x-4 w-full">
+                      <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
+                        <span className="flex h-full w-full items-center justify-center rounded-full bg-muted text-black">{user.email[0]}</span>
                       </span>
                       <div className="flex items-center justify-between w-full">
                         <div>
-                          <p class="font-medium">{user.email}</p>
-                          <p class="text-sm text-muted-foreground">
-                            {user.created_at}
-                          </p>
+                          <p className="font-medium">{user.email}</p>
+                          <p className="text-sm text-muted-foreground">{user.created_at}</p>
                         </div>
                         <span className="capitalize">{user.status}</span>
                       </div>
@@ -84,13 +73,7 @@ const page = async () => {
           </ul>
         </CardContent>
       </Card>
-      {userRole == "admin" && (
-        <InvitationForm
-          createInvitation={createInvitation}
-          invited_by={userId}
-          org_id={org_id}
-        />
-      )}
+      {userRole == "admin" && <InvitationForm createInvitation={createInvitation} invited_by={userId} org_id={org_id} />}
     </div>
   );
 };

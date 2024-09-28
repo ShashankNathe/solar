@@ -9,19 +9,11 @@ const page = async () => {
   const leads = leadsData.data || [];
   const today = new Date();
   const thirtyDaysAgo = new Date(today.setMonth(today.getMonth() - 1));
-  const leadsInLast30Days = leads.filter(
-    (lead) => new Date(lead.created_at) >= thirtyDaysAgo
-  );
-  const convertedLeads = leadsInLast30Days.filter(
-    (lead) => lead.status !== "new" && lead.status !== "lost"
-  );
-  const conversionRate =
-    (convertedLeads.length / leadsInLast30Days.length) * 100;
+  const leadsInLast30Days = leads.filter((lead) => new Date(lead.created_at) >= thirtyDaysAgo);
+  const convertedLeads = leadsInLast30Days.filter((lead) => lead.status !== "new" && lead.status !== "lost");
+  const conversionRate = (convertedLeads.length / leadsInLast30Days.length) * 100;
   const completedLeads = convertedLeads.filter((lead) => lead.status === "won");
-  const totalRevenue = completedLeads.reduce(
-    (acc, lead) => acc + lead.price,
-    0
-  );
+  const totalRevenue = completedLeads.reduce((acc, lead) => acc + lead.price, 0);
   const mockCardData = [
     { title: "Leads last 30 days", value: leadsInLast30Days.length },
     { title: "Conversion Rate", value: conversionRate },
@@ -32,9 +24,7 @@ const page = async () => {
   sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6); // Get six months ago
 
   // Filter leads created in the last 6 months
-  const leadsInLast6Months = leads.filter(
-    (lead) => new Date(lead.created_at) >= sixMonthsAgo
-  );
+  const leadsInLast6Months = leads.filter((lead) => new Date(lead.created_at) >= sixMonthsAgo);
 
   const months = [];
   // Get last 6 months' names
@@ -52,18 +42,13 @@ const page = async () => {
 
     return { month, leads: monthLeads.length };
   });
-  const latestLeads = leadsInLast6Months
-    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-    .slice(0, 5);
+  const latestLeads = leadsInLast6Months.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 5);
 
   return (
     <div className="p-3 md:p-6 space-y-6 text-white">
       <div className="grid grid-cols-4 gap-3">
         <div className=" bg-[#161618] p-4 rounded-lg shadow col-span-4 md:col-span-3">
-          <DashboardChart
-            chartData={JSON.parse(JSON.stringify(chartData))}
-            className="h-40"
-          />
+          <DashboardChart chartData={JSON.parse(JSON.stringify(chartData))} className="h-40" />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-1 gap-4 col-span-4 md:col-span-1">
@@ -82,10 +67,7 @@ const page = async () => {
 
       <div className="bg-[#161618] p-4 rounded-lg shadow">
         <h2 className="text-xl font-semibold mb-4">Latest Leads</h2>
-        <LeadsTable
-          leads={JSON.parse(JSON.stringify(latestLeads))}
-          deleteLead={deleteLead}
-        />
+        <LeadsTable leads={JSON.parse(JSON.stringify(latestLeads))} deleteLead={deleteLead} />
       </div>
     </div>
   );
