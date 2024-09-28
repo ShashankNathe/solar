@@ -1,10 +1,10 @@
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import DynamicBreadCrumbs from "@/components/DynamicBreadcrumbs";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { getUserOrgIdAndRole } from "@/app/actions/auth";
 import Sidebar from "@/components/Sidebar";
+import DynamicBreadCrumbs from "@/components/DynamicBreadCrumbs";
 
 export default async function Layout({ children }) {
   const getUser = async () => {
